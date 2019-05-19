@@ -58,7 +58,7 @@ export const login = (username, password) => {
             })
             .then(res => {
                 if (res.status === 200) {
-                    dispatch({ type: 'LOGIN_SUCCESFUL', data: res.data });
+                    dispatch({ type: 'LOGIN_SUCCESSFUL', data: res.data });
                     return res.data;
                 }
                 else if (res.status === 403 || res.status === 401) {
