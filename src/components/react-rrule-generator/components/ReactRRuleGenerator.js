@@ -5,12 +5,12 @@ import { cloneDeep, set } from 'lodash';
 import Start from './Start/index';
 import Repeat from './Repeat/index';
 import End from './End/index';
-import computeRRuleToString from './utils/computeRRule/toString/computeRRule';
-import computeRRuleFromString from './utils/computeRRule/fromString/computeRRule';
-import configureInitialState from './utils/configureInitialState';
-import translateLabel from './utils/translateLabel';
-import translations from './translations';
-import './styles/index.css';
+import computeRRuleToString from '../utils/computeRRule/toString/computeRRule';
+import computeRRuleFromString from '../utils/computeRRule/fromString/computeRRule';
+import configureInitialState from '../utils/configureInitialState';
+import translateLabel from '../utils/translateLabel';
+import translations from '../translations';
+import '../styles/index.css';
 
 class ReactRRuleGenerator extends PureComponent {
   // compute default view based on user's config

@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import StartOnDate from './OnDate';
 
-import translateLabel from '../utils/translateLabel';
+import translateLabel from '../../utils/translateLabel';
 
 const Start = ({
   id,

@@ -1,10 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import { DAYS } from '../../constants/index';
-import translateLabel from '../../utils/translateLabel';
+import { MONTHS, DAYS } from '../../../constants/index';
+import translateLabel from '../../../utils/translateLabel';
 
-const RepeatMonthlyOnThe = ({
+const RepeatYearlyOnThe = ({
   id,
   mode,
   onThe,
@@ -21,23 +21,23 @@ const RepeatMonthlyOnThe = ({
           <input
             id={id}
             type="radio"
-            name="repeat.monthly.mode"
-            aria-label="Repeat monthly on the"
-            value="on the"
+            aria-label="Repeat yearly on the"
+            name="repeat.yearly.mode"
             checked={isActive}
+            value="on the"
             onChange={handleChange}
           />
         )}
       </div>
       <div className="col-sm-1">
-        {translateLabel(translations, 'repeat.monthly.on_the')}
+        {translateLabel(translations, 'repeat.yearly.on_the')}
       </div>
 
       <div className="col-sm-2">
         <select
           id={`${id}-which`}
-          name="repeat.monthly.onThe.which"
-          aria-label="Repeat monthly on the which"
+          name="repeat.yearly.onThe.which"
+          aria-label="Repeat yearly on the which"
           className="form-control"
           value={onThe.which}
           disabled={!isActive}
@@ -54,8 +54,8 @@ const RepeatMonthlyOnThe = ({
       <div className="col-sm-3">
         <select
           id={`${id}-day`}
-          name="repeat.monthly.onThe.day"
-          aria-label="Repeat monthly on the day"
+          name="repeat.yearly.onThe.day"
+          aria-label="Repeat yearly on the day"
           className="form-control"
           value={onThe.day}
           disabled={!isActive}
@@ -65,14 +65,33 @@ const RepeatMonthlyOnThe = ({
         </select>
       </div>
 
+      <div className="col-sm-1">
+          {translateLabel(translations, 'repeat.yearly.of')}
+      </div>
+
+      <div className="col-sm-2">
+        <select
+          id={`${id}-month`}
+          name="repeat.yearly.onThe.month"
+          aria-label="Repeat yearly on the month"
+          className="form-control"
+          value={onThe.month}
+          disabled={!isActive}
+          onChange={handleChange}
+        >
+          {MONTHS.map(month => <option key={month} value={month}>{translateLabel(translations, `months.${month.toLowerCase()}`)}</option>)}
+        </select>
+      </div>
+
     </div>
   );
 };
-RepeatMonthlyOnThe.propTypes = {
+RepeatYearlyOnThe.propTypes = {
   id: PropTypes.string.isRequired,
   mode: PropTypes.oneOf(['on', 'on the']).isRequired,
   onThe: PropTypes.shape({
     which: PropTypes.oneOf(['First', 'Second', 'Third', 'Fourth', 'Last']).isRequired,
+    month: PropTypes.oneOf(MONTHS).isRequired,
     day: PropTypes.oneOf(DAYS).isRequired,
   }).isRequired,
   hasMoreModes: PropTypes.bool.isRequired,
@@ -80,4 +99,4 @@ RepeatMonthlyOnThe.propTypes = {
   translations: PropTypes.oneOfType([PropTypes.object, PropTypes.func]).isRequired,
 };
 
-export default RepeatMonthlyOnThe;
+export default RepeatYearlyOnThe;

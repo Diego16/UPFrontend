@@ -63,7 +63,7 @@ export default {
         on_the: 'el',
       },
       weekly: {
-        label: 'Semanal',
+        label: 'Semana',
         every: 'cada',
         weeks: 'semana(s)',
       },

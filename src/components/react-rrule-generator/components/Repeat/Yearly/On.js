@@ -3,9 +3,9 @@ import PropTypes from 'prop-types';
 import moment from 'moment';
 import { range } from 'lodash';
 
-import numericalFieldHandler from '../../utils/numericalFieldHandler';
-import { MONTHS } from '../../constants/index';
-import translateLabel from '../../utils/translateLabel';
+import numericalFieldHandler from '../../../utils/numericalFieldHandler';
+import { MONTHS } from '../../../constants/index';
+import translateLabel from '../../../utils/translateLabel';
 
 const RepeatYearlyOn = ({
   id,

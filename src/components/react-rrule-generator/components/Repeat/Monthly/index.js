@@ -2,8 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import RepeatMonthlyOn from './On';
 import RepeatMonthlyOnThe from './OnThe';
-import numericalFieldHandler from '../../utils/numericalFieldHandler';
-import translateLabel from '../../utils/translateLabel';
+import numericalFieldHandler from '../../../utils/numericalFieldHandler';
+import translateLabel from '../../../utils/translateLabel';
 
 const RepeatMonthly = ({
   id,

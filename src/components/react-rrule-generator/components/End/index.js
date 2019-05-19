@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import EndAfter from './After';
 import EndOnDate from './OnDate';
 
-import translateLabel from '../utils/translateLabel';
+import translateLabel from '../../utils/translateLabel';
 
 const End = ({
   id,
@@ -32,7 +32,7 @@ const End = ({
             </strong>
           </label>
         </div>
-        <div className="col-sm-4">
+        <div className="col-sm-3">
           <select
             name="end.mode"
             id={id}
@@ -45,6 +45,7 @@ const End = ({
             {isOptionAvailable('On date') && <option value="On date">{translateLabel(translations, 'end.on_date')}</option>}
           </select>
         </div>
+
         {
           isOptionSelected('After') &&
           <EndAfter
@@ -63,6 +64,7 @@ const End = ({
             translations={translations}
           />
         }
+
       </div>
     </div>
   );

@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { toPairs } from 'lodash';
-import numericalFieldHandler from '../../utils/numericalFieldHandler';
-import translateLabel from '../../utils/translateLabel';
+import numericalFieldHandler from '../../../utils/numericalFieldHandler';
+import translateLabel from '../../../utils/translateLabel';
 
 const RepeatWeekly = ({
   id,

@@ -4,8 +4,8 @@ import moment from 'moment';
 import DateTime from 'react-datetime';
 import 'moment/min/locales';
 
-import { DATE_TIME_FORMAT } from '../constants/index';
-import translateLabel from '../utils/translateLabel';
+import { DATE_TIME_FORMAT } from '../../constants/index';
+import translateLabel from '../../utils/translateLabel';
 
 const StartOnDate = ({
   id,
@@ -27,7 +27,7 @@ const StartOnDate = ({
   };
 
   return (
-    <div className="col-6 col-sm-6">
+    <div className="col-6 col-sm-3">
       {
         CustomCalendar
           ? <CustomCalendar
@@ -54,7 +54,7 @@ const StartOnDate = ({
               }
             }
             locale={translateLabel(translations, 'locale')}
-            timeFormat="HH:mm"
+            timeFormat={false}
             viewMode="days"
             closeOnSelect
             closeOnTab

@@ -5,7 +5,7 @@ import RepeatMonthly from './Monthly/index';
 import RepeatWeekly from './Weekly/index';
 import RepeatDaily from './Daily/index';
 import RepeatHourly from './Hourly/index';
-import translateLabel from '../utils/translateLabel';
+import translateLabel from '../../utils/translateLabel';
 
 const Repeat = ({
   id,
