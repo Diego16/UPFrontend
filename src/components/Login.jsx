@@ -25,13 +25,6 @@ class Login extends Component {
             <form onSubmit={this.onSubmit} className="content">
                 <fieldset>
                     <legend>UPlanner</legend>
-                    {this.props.errors.length > 0 && (
-                        <ul>
-                            {this.props.errors.map(error => (
-                                <li key={error.field}>{error.message}</li>
-                            ))}
-                        </ul>
-                    )}
                     <div className="form-group">
                         <label htmlFor="username">Correo electrónico</label>
                         <input type="email" className="form-control" id="username" onChange={e => this.setState({ username: e.target.value })} />
@@ -43,6 +36,13 @@ class Login extends Component {
                     <div className="form-group">
                         <button type="submit" className="btn btn-primary">Ingresar</button>
                     </div>
+                    {this.props.errors.length > 0 && (
+                        <ul>
+                            {this.props.errors.map(error => (
+                                <li key={error.field}>{error.message}</li>
+                            ))}
+                        </ul>
+                    )}
                     <p>¿No estás registrado? <Link to="/register">Regístrate</Link></p>
                 </fieldset>
             </form>

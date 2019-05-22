@@ -7,14 +7,13 @@ import timeGridPlugin from '@fullcalendar/timegrid';
 import interactionPlugin from '@fullcalendar/interaction';
 import rrulePlugin from '@fullcalendar/rrule';
 import bootstrapPlugin from '@fullcalendar/bootstrap';
-import EventModal from './EventModal';
 import { events } from "../actions";
 
 
-class Calendar extends Component {
+class UEvents extends Component {
 
   componentDidMount() {
-    this.props.fetchEvents();
+    this.props.fetchUEvents();
   }
 
   calendarComponentRef = React.createRef()
@@ -36,57 +35,32 @@ class Calendar extends Component {
             header={{
               left: 'prev,next today',
               center: 'title',
-              right: 'dayGridMonth,timeGridWeek,timeGridDay,listWeek'
+              right: 'timeGridWeek,timeGridDay,listWeek'
             }}
             plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin, rrulePlugin, bootstrapPlugin]}
             ref={this.calendarComponentRef}
             events={this.props.events}
-            dateClick={this.handleDateClick}
             eventClick={this.toggleEventModal}
             nowIndicator={true}
-          />
-          <EventModal
-            show={this.state.isModalOpen}
-            onClose={this.toggleModal}
-            changeStart={this.toggleStart}
-            start={this.state.start}
           />
         </div>
       </div>
     );
   }
-
-  toggleModal = () => {
-    this.setState({
-      isModalOpen: !this.state.isModalOpen
-    })
-  }
-
-  toggleStart = (date) => {
-    this.setState({
-      start: date
-    })
-  }
-
-  handleDateClick = (arg) => {
-    this.toggleStart(arg.date)
-    this.toggleModal()
-  }
-
 }
 const mapStateToProps = state => {
-  return {
-    events: state.events,
-    user: state.auth.user,
+    return {
+      events: state.events,
+      user: state.auth.user,
+    }
   }
-}
-
-const mapDispatchToProps = dispatch => {
-  return {
-    fetchEvents: () => {
-      dispatch(events.fetchEvents());
-    },
+  
+  const mapDispatchToProps = dispatch => {
+    return {
+      fetchUEvents: () => {
+        dispatch(events.fetchUEvents());
+      },
+    }
   }
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(Calendar);
+  
+  export default connect(mapStateToProps, mapDispatchToProps)(UEvents);
