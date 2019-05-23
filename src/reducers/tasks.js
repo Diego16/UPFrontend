@@ -13,8 +13,7 @@ export default function tasks(state=initialState, action) {
             return [...state, action.note];
 
         case 'UPDATE_TASK':
-            let noteToUpdate = taskList[action.id]
-            noteToUpdate.text = action.note.text;
+            let noteToUpdate = action.task;
             taskList.splice(action.id, 1, noteToUpdate);
             return taskList;
 

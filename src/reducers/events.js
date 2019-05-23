@@ -13,8 +13,7 @@ export default function events(state=initialState, action) {
             return [...state, action.note];
 
         case 'UPDATE_EVENT':
-            let noteToUpdate = eventList[action.index]
-            noteToUpdate.text = action.note.text;
+            let noteToUpdate = action.event
             eventList.splice(action.index, 1, noteToUpdate);
             return eventList;
 
