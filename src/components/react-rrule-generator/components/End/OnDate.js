@@ -28,7 +28,7 @@ const EndOnDate = ({
   };
 
   return (
-    <div className="col-6 col-sm-3">
+    <div className="col-6 col-sm-6">
       {
         CustomCalendar
           ? <CustomCalendar
