@@ -62,6 +62,7 @@ class Calendar extends Component {
             onClose={this.toggleModal}
             updateEventId={this.state.updateEventId}
             changeStart={this.toggleStart}
+            changeEnd={this.toggleEnd}
             changeColor={this.changeColor}
             changeTitle={this.changeTitle}
             changeDescription={this.changeDescription}
@@ -92,6 +93,11 @@ class Calendar extends Component {
   toggleStart = (date) => {
     this.setState({
       start: date
+    })
+  }
+  toggleEnd = (date) => {
+    this.setState({
+      end: date
     })
   }
 
