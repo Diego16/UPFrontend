@@ -71,7 +71,7 @@ export const addEvent = (title, start, end, allDay, rrule, description, user, co
         if (token) {
             headers["Authorization"] = `Token ${token}`;
         }
-        return fetch(`${base_url}/create_event/`, {
+        return fetch(`${base_url}/events/`, {
             method: "POST",
             mode: "cors",
             cache: "no-cache",
@@ -113,7 +113,7 @@ export const addEvent = (title, start, end, allDay, rrule, description, user, co
     }
 }
 
-export const updateEvent = (index, text) => {
+export const updateEvent = (id, title, start, end, allDay, rrule, description, user, color) => {
     return (dispatch, getState) => {
 
         let headers = { "Content-Type": "application/json" };
@@ -123,10 +123,25 @@ export const updateEvent = (index, text) => {
             headers["Authorization"] = `Token ${token}`;
         }
 
-        let body = JSON.stringify({ text, });
-        let noteId = getState().Events[index].id;
-
-        return fetch(`${base_url}/events/${noteId}/`, { headers, method: "PUT", body })
+        return fetch(`${base_url}/events/${id}/`, {
+            method: "PUT",
+            mode: "cors",
+            cache: "no-cache",
+            credentials: "same-origin",
+            headers,
+            redirect: "follow",
+            referrer: "no-referrer",
+            body: JSON.stringify({
+                'title': title,
+                'start': start,
+                'end': end,
+                'allDay': allDay,
+                'rrule': rrule,
+                'description': description,
+                'user': user,
+                'color': color,
+            }),
+        })
             .then(res => {
                 if (res.status < 500) {
                     return res.json().then(data => {
@@ -139,7 +154,7 @@ export const updateEvent = (index, text) => {
             })
             .then(res => {
                 if (res.status === 200) {
-                    return dispatch({ type: 'UPDATE_EVENT', note: res.data, index });
+                    return dispatch({ type: 'UPDATE_EVENT', note: res.data, id });
                 } else if (res.status === 401 || res.status === 403) {
                     dispatch({ type: "AUTHENTICATION_ERROR", data: res.data });
                     throw res.data;
@@ -148,7 +163,7 @@ export const updateEvent = (index, text) => {
     }
 }
 
-export const deleteEvent = index => {
+export const deleteEvent = id => {
     return (dispatch, getState) => {
 
         let headers = { "Content-Type": "application/json" };
@@ -158,9 +173,7 @@ export const deleteEvent = index => {
             headers["Authorization"] = `Token ${token}`;
         }
 
-        let noteId = getState().events[index].id;
-
-        return fetch(`${base_url}/events/${noteId}/`, { headers, method: "DELETE" })
+        return fetch(`${base_url}/events/${id}/`, { headers, method: "DELETE" })
             .then(res => {
                 if (res.status === 204) {
                     return { status: res.status, data: {} };
@@ -175,7 +188,7 @@ export const deleteEvent = index => {
             })
             .then(res => {
                 if (res.status === 204) {
-                    return dispatch({ type: 'DELETE_EVENTS', index });
+                    return dispatch({ type: 'DELETE_EVENTS', id });
                 } else if (res.status === 401 || res.status === 403) {
                     dispatch({ type: "AUTHENTICATION_ERROR", data: res.data });
                     throw res.data;

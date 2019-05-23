@@ -78,7 +78,7 @@ export const addTask = (title, start, description, user, color) => {
     }
 }
 
-export const updateSensor = (id, title, start, description, user, color) => {
+export const updateTask = (id, title, start, description, user, color) => {
     return (dispatch, getState) => {
 
         let headers = { "Content-Type": "application/json" };
@@ -125,7 +125,7 @@ export const updateSensor = (id, title, start, description, user, color) => {
     }
 }
 
-export const deleteSensor = id => {
+export const deleteTask = id => {
     return (dispatch, getState) => {
 
         let headers = { "Content-Type": "application/json" };
