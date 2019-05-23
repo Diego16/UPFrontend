@@ -19,7 +19,7 @@ class Login extends Component {
 
     render() {
         if (this.props.isAuthenticated) {
-            return <Redirect to="/" />
+            return <Redirect to="/home" />
         }
         return (
             <form onSubmit={this.onSubmit} className="content">
@@ -37,11 +37,11 @@ class Login extends Component {
                         <button type="submit" className="btn btn-primary">Ingresar</button>
                     </div>
                     {this.props.errors.length > 0 && (
-                        <ul>
+                        <div class="alert alert-dismissible alert-danger" >
                             {this.props.errors.map(error => (
-                                <li key={error.field}>{error.message}</li>
+                                <p key={error.field}>{error.message}</p>
                             ))}
-                        </ul>
+                        </div>
                     )}
                     <p>¿No estás registrado? <Link to="/register">Regístrate</Link></p>
                 </fieldset>
