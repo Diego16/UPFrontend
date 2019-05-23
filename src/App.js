@@ -6,45 +6,47 @@ import { Route, Switch, BrowserRouter, Redirect } from 'react-router-dom';
 import { Provider, connect } from 'react-redux';
 import { createStore, applyMiddleware } from 'redux';
 import thunk from 'redux-thunk';
-
 import { auth } from './actions';
 import calendarApp from './reducers';
-
 import NotFound from './components/NotFound';
 import Register from './components/Register';
 import Login from './components/Login';
 import Calendar from './components/Calendar';
-import Admin from './components/Admin';
 import Navbar from './components/Navbar';
 import Profile from './components/Profile';
+import UEvents from './components/UEvents';
+import Tasks from './components/Tasks';
 
 let store = createStore(calendarApp, applyMiddleware(thunk));
+
+
+const PrivateRoute = ({ Component: ChildComponent, ...rest }) => {
+  return <Route {...rest} render={props => {
+    if (this.props.auth.isLoading) {
+      return <em>Loading...</em>;
+    }
+    else if (!this.props.auth.isAuthenticated) {
+      return <Redirect to="/login" />;
+    }
+    else {
+      return <ChildComponent {...props} />;
+    }
+  }} />
+}
 
 class RootContainerComponent extends Component {
   componentDidMount() {
     this.props.loadUser();
   }
-  PrivateRoute = ({ Component: ChildComponent, ...rest }) => {
-    return <Route {...rest} render={props => {
-      if (this.props.auth.isLoading) {
-        return <em>Loading...</em>;
-      }
-      else if (!this.props.auth.isAuthenticated) {
-        return <Redirect to="/login" />;
-      }
-      else {
-        return <ChildComponent {...props} />;
-      }
-    }} />
-  }
   render() {
-    let { PrivateRoute } = this;
     return (
       <BrowserRouter>
         <Switch>
-          <PrivateRoute exact path="/" component={Calendar} />
-          <PrivateRoute exact path="/admin" component={Admin} />
+          <PrivateRoute exact path="/home" component={Calendar} />
           <PrivateRoute exact path="/profile" component={Profile} />
+          <PrivateRoute exact path="/events" component={UEvents} />
+          <PrivateRoute exact path="/tasks" component={Tasks} />
+          <Route exact path="/" component={UEvents} />
           <Route exact path="/register" component={Register} />
           <Route exact path="/login" component={Login} />
           <Route component={NotFound} />
