@@ -70,7 +70,7 @@ class TaskModal extends React.Component {
                         <div className="modal-footer">
                             <button type="submit" className="btn btn-primary" onClick={this.onSubmit}>Guardar</button>
                             {this.props.updateTaskId !== null && (
-                                <button type="button" className="btn btn-danger" onClick={this.props.deleteTask(this.props.updateTaskId)}>Eliminar</button>
+                                <button type="button" className="btn btn-danger" onClick={()=>{if (window.confirm("¿Desea eliminar la tarea " +this.props.title+ " de su calendario?"))this.props.deleteTask(this.props.updateTaskId);}}>Eliminar</button>
                             )}
                             <button type="button" className="btn btn-secondary" onClick={this.props.onClose}>Cancelar</button>
                         </div>

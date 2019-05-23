@@ -22,7 +22,7 @@ class EventModal extends React.Component {
         }
         return (
             <div className="modal-backdrop" >
-                <div className="modal-dialog">
+                <div className="modal-dialog-scrollable">
                     <div className="modal-content">
                         <div className="modal-header">
                             <h5 className="modal-title">Crear evento</h5>
@@ -150,7 +150,7 @@ class EventModal extends React.Component {
                         <div className="modal-footer">
                             <button type="submit" className="btn btn-primary" onClick={this.onSubmit}>Guardar</button>
                             {this.props.updateEventId !== null && (
-                                <button type="button" className="btn btn-danger" onClick={this.props.deleteEvent(this.props.updateEventId)}>Eliminar</button>
+                                <button type="button" className="btn btn-danger" onClick={()=>{if (window.confirm("¿Desea eliminar el evento " +this.props.title+ " de su calendario?"))this.props.deleteEvent(this.props.updateEventId);}}>Eliminar</button>
                             )}
                             <button type="button" className="btn btn-secondary" data-dismiss="modal" onClick={this.props.onClose}>Cancelar</button>
                         </div>
