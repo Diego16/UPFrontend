@@ -10,7 +10,7 @@ class Navbar extends React.Component {
 
         return (
             <nav className="navbar navbar-expand-lg navbar-dark bg-primary">
-                <a className="navbar-brand" href="/">UPlanner</a>
+                <a className="navbar-brand" href="/home">UPlanner</a>
                 <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
                     <span className="navbar-toggler-icon"></span>
                 </button>
@@ -19,13 +19,13 @@ class Navbar extends React.Component {
                         {this.props.user.first_name !== "Administrador" && (
                             <ul className="navbar-nav mr-auto">
                                 <li className="nav-item">
-                                    <a className="nav-link" href="/">Calendario</a>
-                                </li>
-                                <li className="nav-item">
-                                    <a className="nav-link" href="/events">Eventos universitarios</a>
+                                    <a className="nav-link" href="/home">Calendario</a>
                                 </li>
                                 <li className="nav-item">
                                     <a className="nav-link" href="/tasks">Tareas</a>
+                                </li>
+                                <li className="nav-item">
+                                    <a className="nav-link" href="/events">Eventos universitarios</a>
                                 </li>
                             </ul>
                         )}
@@ -38,6 +38,13 @@ class Navbar extends React.Component {
                             </li>
                         </ul>
                     </div>
+                )}
+                {this.props.user == null && (
+                    <ul className="navbar-nav mr-ms-2">
+                        <li className="navbar-nav">
+                            <a className="nav-link" href="/login" onClick={this.props.logout}>Ingresar</a>
+                        </li>
+                    </ul>
                 )}
             </nav>
         );
