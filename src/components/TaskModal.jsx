@@ -8,15 +8,12 @@ import { CirclePicker } from 'react-color';
 registerLocale("es", es);
 
 class TaskModal extends React.Component {
-    state = {
-        color: "#B71C1C"
-    }
     onSubmit = () => {
-        if (this.state.updateTaskId === null) {
-            this.props.addTask(document.getElementById("title").value, this.props.start, document.getElementById("description").value, this.props.user.id, this.state.color).then(this.props.onClose);
+        if (this.props.updateTaskId === null) {
+            this.props.addTask(document.getElementById("title").value, this.props.start, document.getElementById("description").value, this.props.user.id, this.props.color).then(this.props.onClose).then(this.props.cleanForm);
         } else {
-            this.props.updateTask(this.state.updateSensorId, document.getElementById("title").value, this.props.start, document.getElementById("description").value, this.props.user.id, this.state.color).then(this.props.onClose);
-        }   
+            this.props.updateTask(this.props.updateTaskId, document.getElementById("title").value, this.props.start, document.getElementById("description").value, this.props.user.id, this.props.color).then(this.props.onClose).then(this.props.cleanForm);
+        }
     }
     render() {
         if (!this.props.show) {
@@ -36,7 +33,7 @@ class TaskModal extends React.Component {
                             <form>
                                 <div className="form-group">
                                     <label className="col-form-label" htmlFor="title">Título de la tarea</label>
-                                    <input type="text" className="form-control" placeholder="Título de la tarea" id="title" />
+                                    <input type="text" className="form-control" placeholder="Título de la tarea" id="title" value={this.props.title} onChange={e => this.props.changeTitle(e.target.value)} />
                                 </div>
                                 <div className="form-group">
                                     <label className="col-form-label" htmlFor="startDateTime">Fecha de entrega</label>
@@ -61,43 +58,26 @@ class TaskModal extends React.Component {
                                     <CirclePicker
                                         id="colorPicker"
                                         colors={["#f44336", "#e91e63", "#9c27b0", "#673ab7", "#3f51b5", "#2196f3", "#03a9f4", "#00bcd4", "#009688", "#4caf50", "#8bc34a", "#795548"]}
-                                        onChange={(color) => this.setState({ color: color.hex })}
+                                        onChange={(color) => this.props.changeColor(color.hex)}
                                     />
                                 </div>
                                 <div className="form-group">
                                     <label htmlFor="description">Descripción</label>
-                                    <textarea className="form-control" id="description" rows="3" />
+                                    <textarea className="form-control" id="description" rows="3" value={this.props.description} onChange={e => this.props.changeDescription(e.target.value)} />
                                 </div>
                             </form>
                         </div>
                         <div className="modal-footer">
                             <button type="submit" className="btn btn-primary" onClick={this.onSubmit}>Guardar</button>
+                            {this.props.updateTaskId !== null && (
+                                <button type="button" className="btn btn-danger" onClick={this.props.deleteTask(this.props.updateTaskId)}>Eliminar</button>
+                            )}
                             <button type="button" className="btn btn-secondary" onClick={this.props.onClose}>Cancelar</button>
                         </div>
                     </div>
                 </div>
             </div>
         );
-    }
-    toggleAllDay = () => {
-        this.setState({
-            isAllDayChecked: !this.state.isAllDayChecked
-        })
-    }
-    toggleRecurrence = () => {
-        this.setState({
-            isRecurrent: !this.state.isRecurrent
-        })
-    }
-    handleStartChange = (date) => {
-        this.setState({
-            startDate: date,
-        });
-    }
-    handleEndChange = (date) => {
-        this.setState({
-            endDate: date,
-        });
     }
 }
 const mapStateToProps = state => {
@@ -108,7 +88,9 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
     return {
-        addTask: (title, startDate, description, user, color) => dispatch(tasks.addTask(title, startDate, description, user, color))
+        addTask: (title, startDate, description, user, color) => dispatch(tasks.addTask(title, startDate, description, user, color)),
+        updateTask: (id, title, startDate, description, user, color) => dispatch(tasks.updateTask(id, title, startDate, description, user, color)),
+        deleteTask: (id) => dispatch(tasks.deleteTask(id)),
     }
 }
 

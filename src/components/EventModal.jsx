@@ -9,16 +9,12 @@ import { CirclePicker } from 'react-color';
 registerLocale("es", es);
 
 class EventModal extends React.Component {
-    state = {
-        isAllDayChecked: false,
-        isRecurrent: false,
-        endDate: new Date(),
-        rrule: null,
-        frequency: "",
-        color: "#325d88"
-    }
     onSubmit = () => {
-        this.props.addEvent(document.getElementById("title").value, this.props.start, this.state.endDate, this.state.isAllDayChecked, this.state.rrule, document.getElementById("description").value, this.props.user.id, this.state.color).then(this.props.onClose);
+        if (this.props.updateEventId === null) {
+            this.props.addEvent(document.getElementById("title").value, this.props.start, this.props.end, this.props.isAllDayChecked, this.props.rrule, document.getElementById("description").value, this.props.user.id, this.props.color).then(this.props.onClose);
+        } else {
+            this.props.updateEvent(this.props.updateEventId, document.getElementById("title").value, this.props.start, this.props.end, this.props.isAllDayChecked, this.props.rrule, document.getElementById("description").value, this.props.user.id, this.props.color).then(this.props.onClose);
+        }
     }
     render() {
         if (!this.props.show) {
@@ -38,19 +34,19 @@ class EventModal extends React.Component {
                             <form>
                                 <div className="form-group">
                                     <label className="col-form-label" htmlFor="title">Título del evento</label>
-                                    <input type="text" className="form-control" placeholder="Título del evento" id="title" />
+                                    <input type="text" className="form-control" placeholder="Título del evento" id="title" value={this.props.title} onChange={e => this.props.changeTitle(e.target.value)} />
                                 </div>
                                 <div className="form-group form-inline">
                                     <div className="custom-control custom-switch">
-                                        <input type="checkbox" className="custom-control-input form-control" id="allDay" onChange={this.toggleAllDay} checked={this.state.isAllDayChecked} />
+                                        <input type="checkbox" className="custom-control-input form-control" id="allDay" onChange={this.props.toggleAllDay} checked={this.props.isAllDayChecked} />
                                         <label className="custom-control-label" htmlFor="allDay">Todo el día</label>
                                     </div>
                                     <div className="custom-control custom-switch">
-                                        <input type="checkbox" className="custom-control-input form-control" id="recurrence" onChange={this.toggleRecurrence} checked={this.state.isRecurrent} />
+                                        <input type="checkbox" className="custom-control-input form-control" id="recurrence" onChange={this.props.toggleRecurrence} checked={this.props.isRecurrent} />
                                         <label className="custom-control-label" htmlFor="recurrence">Repetición</label>
                                     </div>
                                 </div>
-                                <div hidden={!this.state.isRecurrent}>
+                                <div hidden={!this.props.isRecurrent}>
                                     <ReactRRuleGenerator
                                         config={{
                                             hideStart: false,
@@ -58,14 +54,15 @@ class EventModal extends React.Component {
                                             weekStartsOnSunday: true,
                                             hideError: true,
                                         }}
-                                        onChange={(rrule) => {this.setState({ rrule: rrule });console.log(rrule)}}
+                                        onChange={(rrule) => this.props.changeRRule(rrule)}
                                         translations={translations.spanish}
+                                        value={this.props.rrule}
                                     />
                                 </div>
-                                <div hidden={this.state.isRecurrent}>
+                                <div hidden={this.props.isRecurrent}>
                                     <div className="form-group">
                                         <label className="col-form-label" htmlFor="startDate">Inicio del evento</label>
-                                        <div hidden={this.state.isAllDayChecked}>
+                                        <div hidden={this.props.isAllDayChecked}>
                                             <DatePicker
                                                 locale="es"
                                                 className="form-control"
@@ -79,12 +76,12 @@ class EventModal extends React.Component {
                                                 selectsStart
                                                 selected={this.props.start}
                                                 startDate={this.props.start}
-                                                endDate={this.state.endDate}
+                                                endDate={this.props.end}
                                                 onChange={this.props.changeStart}
                                                 isClearable={true}
                                             />
                                         </div>
-                                        <div hidden={!this.state.isAllDayChecked}>
+                                        <div hidden={!this.props.isAllDayChecked}>
                                             <DatePicker
                                                 locale="es"
                                                 className="form-control"
@@ -92,7 +89,7 @@ class EventModal extends React.Component {
                                                 selectsStart
                                                 selected={this.props.start}
                                                 startDate={this.props.start}
-                                                endDate={this.state.endDate}
+                                                endDate={this.props.end}
                                                 onChange={this.props.changeStart}
                                                 isClearable={true}
                                                 placeholderText="Fecha"
@@ -101,7 +98,7 @@ class EventModal extends React.Component {
                                     </div>
                                     <div className="form-group">
                                         <label className="col-form-label" htmlFor="endDate">Fin del evento</label>
-                                        <div hidden={this.state.isAllDayChecked}>
+                                        <div hidden={this.props.isAllDayChecked}>
                                             <DatePicker
                                                 locale="es"
                                                 className="form-control"
@@ -113,23 +110,23 @@ class EventModal extends React.Component {
                                                 timeIntervals={30}
                                                 placeholderText="Fecha y hora"
                                                 selectsEnd
-                                                selected={this.state.endDate}
-                                                startDate={this.state.startDate}
-                                                endDate={this.state.endDate}
-                                                onChange={this.handleEndChange}
+                                                selected={this.props.end}
+                                                startDate={this.props.start}
+                                                endDate={this.props.end}
+                                                onChange={this.props.changeEnd}
                                                 isClearable={true}
                                             />
                                         </div>
-                                        <div hidden={!this.state.isAllDayChecked}>
+                                        <div hidden={!this.props.isAllDayChecked}>
                                             <DatePicker
                                                 locale="es"
                                                 className="form-control"
                                                 id="endDate"
                                                 selectsEnd
-                                                selected={this.state.endDate}
-                                                startDate={this.state.startDate}
-                                                endDate={this.state.endDate}
-                                                onChange={this.handleEndChange}
+                                                selected={this.props.end}
+                                                startDate={this.props.start}
+                                                endDate={this.props.end}
+                                                onChange={this.props.changeEnd}
                                                 isClearable={true}
                                                 placeholderText="Fecha"
                                             />
@@ -141,43 +138,26 @@ class EventModal extends React.Component {
                                     <CirclePicker
                                         id="colorPicker"
                                         colors={["#f44336", "#e91e63", "#9c27b0", "#673ab7", "#3f51b5", "#2196f3", "#03a9f4", "#00bcd4", "#009688", "#4caf50", "#8bc34a", "#795548"]}
-                                        onChange={(color) => {this.setState({ color: color.hex }); console.log(this.state.color)}}
+                                        onChange={(color) => this.props.changeColor(color.hex)}
                                     />
                                 </div>
                                 <div className="form-group">
                                     <label htmlFor="description">Descripción</label>
-                                    <textarea className="form-control" id="description" rows="3" />
+                                    <textarea className="form-control" id="description" rows="3" value={this.props.description} onChange={e => this.props.changeDescription(e.target.value)} />
                                 </div>
                             </form>
                         </div>
                         <div className="modal-footer">
                             <button type="submit" className="btn btn-primary" onClick={this.onSubmit}>Guardar</button>
+                            {this.props.updateEventId !== null && (
+                                <button type="button" className="btn btn-danger" onClick={this.props.deleteEvent(this.props.updateEventId)}>Eliminar</button>
+                            )}
                             <button type="button" className="btn btn-secondary" data-dismiss="modal" onClick={this.props.onClose}>Cancelar</button>
                         </div>
                     </div>
                 </div>
             </div>
         );
-    }
-    toggleAllDay = () => {
-        this.setState({
-            isAllDayChecked: !this.state.isAllDayChecked
-        })
-    }
-    toggleRecurrence = () => {
-        this.setState({
-            isRecurrent: !this.state.isRecurrent
-        })
-    }
-    handleStartChange = (date) => {
-        this.setState({
-            startDate: date,
-        });
-    }
-    handleEndChange = (date) => {
-        this.setState({
-            endDate: date,
-        });
     }
 }
 const mapStateToProps = state => {
@@ -188,7 +168,9 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
     return {
-        addEvent: (title, startDate, endDate, allDay, rrule, description, user, color) => dispatch(events.addEvent(title, startDate, endDate, allDay, rrule, description, user, color))
+        addEvent: (title, startDate, endDate, allDay, rrule, description, user, color) => dispatch(events.addEvent(title, startDate, endDate, allDay, rrule, description, user, color)),
+        updateEvent: (id, title, startDate, endDate, allDay, rrule, description, user, color) => dispatch(events.updateEvent(id, title, startDate, endDate, allDay, rrule, description, user, color)),
+        deleteEvent: (id) => dispatch(events.deleteEvent(id))
     }
 }
 

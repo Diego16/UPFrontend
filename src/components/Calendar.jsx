@@ -21,8 +21,14 @@ class Calendar extends Component {
   state = {
     updateEventId: null,
     isModalOpen: false,
-    eventModal: false,
-    start: new Date()
+    start: new Date(),
+    isAllDayChecked: false,
+    isRecurrent: false,
+    end: new Date(),
+    rrule: null,
+    color: "#7B7B7B",
+    title: "",
+    description: "",
   }
 
   render() {
@@ -33,23 +39,44 @@ class Calendar extends Component {
             defaultView="timeGridWeek"
             themeSystem="bootstrap"
             locale={esLocale}
+            customButtons={{
+              addButton: {
+                text: 'Agregar Evento',
+                click: this.toggleModal
+              }
+            }}
             header={{
               left: 'prev,next today',
               center: 'title',
-              right: 'dayGridMonth,timeGridWeek,timeGridDay,listWeek'
+              right: 'addButton dayGridMonth,timeGridWeek,timeGridDay'
             }}
             plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin, rrulePlugin, bootstrapPlugin]}
             ref={this.calendarComponentRef}
             events={this.props.events}
             dateClick={this.handleDateClick}
-            eventClick={this.toggleEventModal}
+            eventClick={(info) => { this.loadEvent(info) }}
             nowIndicator={true}
           />
           <EventModal
             show={this.state.isModalOpen}
             onClose={this.toggleModal}
+            updateEventId={this.state.updateEventId}
             changeStart={this.toggleStart}
+            changeColor={this.changeColor}
+            changeTitle={this.changeTitle}
+            changeDescription={this.changeDescription}
+            changeRRule={this.changeRRule}
+            toggleAllDay={this.toggleAllDay}
+            toggleRecurrence={this.toggleRecurrence}
+            cleanForm={this.cleanForm}
             start={this.state.start}
+            isAllDayChecked={this.state.isAllDayChecked}
+            isRecurrent={this.state.isRecurrent}
+            end={this.state.end}
+            rrule={this.state.rrule}
+            color={this.state.color}
+            title={this.state.title}
+            description={this.state.description}
           />
         </div>
       </div>
@@ -72,8 +99,65 @@ class Calendar extends Component {
     this.toggleStart(arg.date)
     this.toggleModal()
   }
-
+  changeColor = (color) => {
+    this.setState({
+      color: color
+    })
+  }
+  changeRRule = (rrule) => {
+    this.setState({
+      rrule: rrule
+    })
+  }
+  changeTitle = (title) => {
+    this.setState({
+      title: title
+    })
+  }
+  changeDescription = (description) => {
+    this.setState({
+      description: description
+    })
+  }
+  toggleAllDay = () => {
+    this.setState({
+      isAllDayChecked: !this.state.isAllDayChecked
+    })
+  }
+  toggleRecurrence = () => {
+    this.setState({
+      isRecurrent: !this.state.isRecurrent
+    })
+  }
+  loadEvent = (info) => {
+    this.setState({
+      updateEventId: info.event.id,
+      start: info.event.start,
+      end: info.event.end,
+      title: info.event.title,
+      color: info.event.color,
+      description: info.event.description,
+      isAllDayChecked: info.event.allDay,
+      isRecurrent: info.event.recurrent,
+      rrule: info.event.rrule,
+      isModalOpen: !this.state.isModalOpen
+    })
+  }
+  cleanForm = () => {
+    this.setState({
+      updateEventId: null,
+      start: new Date(),
+      isAllDayChecked: false,
+      isRecurrent: false,
+      end: new Date(),
+      rrule: null,
+      color: "#7B7B7B",
+      title: "",
+      description: "null",
+    })
+  }
 }
+
 const mapStateToProps = state => {
   return {
     events: state.events,
@@ -83,9 +167,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    fetchEvents: () => {
-      dispatch(events.fetchEvents());
-    },
+    fetchEvents: () => dispatch(events.fetchEvents())
   }
 }
 
