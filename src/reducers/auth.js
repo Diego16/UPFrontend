@@ -1,6 +1,6 @@
 const initialState = {
     token: localStorage.getItem("token"),
-    isAuthenticated: null,
+    isAuthenticated: false,
     isLoading: true,
     user: null,
     errors: {},
@@ -27,10 +27,7 @@ export default function auth(state = initialState, action) {
         case 'REGISTRATION_FAILED':
         case 'LOGOUT_SUCCESSFUL':
             localStorage.removeItem("token");
-            return {
-                ...state, errors: action.data, token: null, user: null,
-                isAuthenticated: false, isLoading: false
-            };
+            return { ...state, errors: action.data, token: null, user: null, isAuthenticated: false, isLoading: false };
 
         default:
             return state;

@@ -10,7 +10,7 @@ export const fetchEvents = () => {
             headers["Authorization"] = `Token ${token}`;
         }
 
-        return fetch(`${base_url}/events`, { headers, })
+        return fetch(`${base_url}/events/`, { headers, })
             .then(res => {
                 if (res.status < 500) {
                     return res.json().then(data => {
@@ -32,7 +32,7 @@ export const fetchEvents = () => {
     }
 }
 
-export const addEvent = text => {
+export const fetchUEvents = () => {
     return (dispatch, getState) => {
         let headers = { "Content-Type": "application/json" };
         let { token } = getState().auth;
@@ -41,8 +41,57 @@ export const addEvent = text => {
             headers["Authorization"] = `Token ${token}`;
         }
 
-        let body = JSON.stringify({ text, });
-        return fetch(`${base_url}/create_event`, { headers, method: "POST", body })
+        return fetch(`${base_url}/uevents/`, { headers, })
+            .then(res => {
+                if (res.status < 500) {
+                    return res.json().then(data => {
+                        return { status: res.status, data };
+                    })
+                } else {
+                    console.log("Server Error!");
+                    throw res;
+                }
+            })
+            .then(res => {
+                if (res.status === 200) {
+                    return dispatch({ type: 'FETCH_EVENTS', events: res.data });
+                } else if (res.status === 401 || res.status === 403) {
+                    dispatch({ type: "AUTHENTICATION_ERROR", data: res.data });
+                    throw res.data;
+                }
+            })
+    }
+}
+
+export const addEvent = (title, start, end, allDay, rrule, description, user, color) => {
+    return (dispatch, getState) => {
+        let headers = { "Content-Type": "application/json" };
+        let { token } = getState().auth;
+
+        if (token) {
+            headers["Authorization"] = `Token ${token}`;
+        }
+        return fetch(`${base_url}/create_event/`, {
+            method: "POST",
+            mode: "cors",
+            cache: "no-cache",
+            credentials: "same-origin",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            redirect: "follow",
+            referrer: "no-referrer",
+            body: JSON.stringify({
+                'title': title,
+                'start': start,
+                'end': end,
+                'allDay': allDay,
+                'rrule': rrule,
+                'description': description,
+                'user': user,
+                'color': color,
+            }),
+        })
             .then(res => {
                 if (res.status < 500) {
                     return res.json().then(data => {

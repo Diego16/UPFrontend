@@ -72,12 +72,25 @@ export const login = (username, password) => {
             })
     }
 }
-export const register = (username, password) => {
+export const register = (username, password, firstName, lastName) => {
     return (dispatch, getState) => {
-        let headers = { "Content-Type": "application/json" };
-        let body = JSON.stringify({ username, password });
-
-        return fetch(`${base_url}/register/`, { headers, body, method: "POST" })
+        return fetch(`${base_url}/register/`, {
+            method: "POST",
+            mode: "cors",
+            cache: "no-cache",
+            credentials: "same-origin",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            redirect: "follow",
+            referrer: "no-referrer",
+            body: JSON.stringify({
+                'username': username,
+                'password': password,
+                'first_name': firstName,
+                'last_name': lastName,
+            }),
+        })
             .then(res => {
                 if (res.status < 500) {
                     return res.json().then(data => {
@@ -95,7 +108,7 @@ export const register = (username, password) => {
                     return res.data;
                 }
                 else if (res.status === 401 || res.status === 403) {
-                    dispatch({ type: 'AUTHENTICATION_FAILED', data: res.data });
+                    dispatch({ type: 'AUTHENTICATION_ERROR', data: res.data });
                     throw res.data;
                 }
                 else {
@@ -135,7 +148,7 @@ export const logout = () => {
                     dispatch({ type: 'LOGOUT SUCCESSFUL' });
                     return res.data;
                 }
-                else if (res.status === 401 || res.status === 401) {
+                else if (res.status === 401 || res.status === 403) {
                     dispatch({ type: 'AUTHENTICATION_ERROR', data: res.data });
                     throw res.data;
                 }
